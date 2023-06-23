@@ -1,0 +1,40 @@
+
+ Install otp_gen lib_otpw :
+  + Cần thêm package libpam0g-dev:
+  	sudo apt-get install libpam0g-dev
+  + make install
+  
+===================================================
+	
+  Tao OTP tren he thong khi su dung dich vu SSH
+  * De dang nhap can:
+  	+ mat khau cấp 1 (Mật khẩu người dùng)
+  	+ mat khau cap 2 (OTP)
+  
+  * Ma OTP: otpw-gen -h 7 > otp_local.txt 
+   mat khau ban dau + ma trong bang gom N bo ma ngau nhien ( co the 1000 bo ma )
+   
+  * Chinh sua cau hinh cua OpenSSH-Server (/etc/ssh/sshd_config)
+   	Thay đổi giá trị của biến 
+   	+ KbdInteractiveAuthentication yes :
+   		- yes là xác thực bằng phương pháp keybroad-interactive.
+   		- no là chỉ nhận các pp xác thực khác như mật khẩu khóa hoặc khóa công khai.
+   	+ UsePrivilegeSeparation yes :
+   		- Cơ chế phân tách đặc quyền, thực hiện yêu cầu SSH sẽ thực thi với các quyền thấp hơn 
+		
+	+ PubkeyAuthentication yes :
+		- yes là cho phép xác thực bằng cách sử dụng khóa công khai và khóa riêng tư.
+		- no là từ chối xác thực khóa công khai và chỉ chấp nhận pp xác thực khác.
+	+ PasswordAuthentication no :
+		- không thể đăng nhập vào máy chủ SSH bằng cung cấp 1 lần mật khẩu và phải xác thực bằng các chứng chỉ phương pháp khác.
+	+ UsePAM yes :
+		- Xác nhận sử dụng Module PAM để xác thực người dùng
+  * Chỉnh sửa cấu hình PAM (/etc/pam.d/sshd)
+  	+ auth       required     pam_otpw.so :
+		- Yêu cầu sử dụng module PAM pam_otpw.so trong quá trình xác thực   		  		
+	+ session    optional     pam_otpw.so :
+	
+
+  	 	
+	
+
